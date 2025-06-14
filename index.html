@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manuzinha - Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://media.discordapp.net/attachments/1381294314746937374/1383278934321401967/image.png?ex=684e3666&is=684ce4e6&hm=1df4c3f4584f323b7694232cf98b209668f18a494d9dc6289a5b15539d318a38&=&format=webp&quality=lossless') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .bg-blur {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .profile-shadow {
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+      animation: glow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+      to { box-shadow: 0 0 50px rgba(255, 255, 255, 0.3); }
+    }
+
+    .volume-button {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 50;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 0.6rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      color: white;
+      font-size: 1.3rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+
+    .volume-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      scale: 1.1;
+    }
+  </style>
+</head>
+<body class="text-white">
+
+  <!-- Botão de volume -->
+  <div class="volume-button" onclick="toggleMusic()">🔊</div>
+
+  <!-- Música de fundo -->
+  <audio id="bg-music" src="./rafaela.mp3" preload="auto" loop></audio>
+
+  <!-- Conteúdo principal -->
+  <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+    <div class="text-center animate-fadeIn">
+      <div class="mb-8">
+        <img src="https://media.discordapp.net/attachments/1381294314746937374/1383278934321401967/image.png?ex=684e3666&is=684ce4e6&hm=1df4c3f4584f323b7694232cf98b209668f18a494d9dc6289a5b15539d318a38&=&format=webp&quality=lossless" alt="Perfil" class="w-32 h-32 mx-auto rounded-full profile-shadow border-2 border-white" />
+      </div>
+
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-wide animate-pulse">
+        Rafaela
+      </h1>
+
+      <p class="text-gray-300 text-lg mb-8 font-medium">
+        Desenvolvedor Pietro, Discord @fodendoloiras0
+      </p>
+
+      <div class="bg-blur bg-black bg-opacity-40 rounded-2xl p-4 mb-8 max-w-sm mx-auto border border-gray-600">
+        <div class="flex items-center space-x-3">
+          <img src="https://media.discordapp.net/attachments/1381294314746937374/1383278934321401967/image.png?ex=684e3666&is=684ce4e6&hm=1df4c3f4584f323b7694232cf98b209668f18a494d9dc6289a5b15539d318a38&=&format=webp&quality=lossless" class="w-12 h-12 rounded-full border border-white" />
+          <div class="flex-1 text-left">
+            <div class="flex items-center space-x-2">
+              <span class="text-white font-semibold">Rafaela 🖤</span>
+              <div class="w-4 h-4 bg-purple-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-check text-white text-xs"></i>
+              </div>
+              <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+            </div>
+            <p class="text-gray-400 text-sm italic">Meu</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center space-x-6 mb-8">
+        <a href="https://discord.gg/3u6jQHaRyM" class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center hover:bg-opacity-30 transition-all duration-300 backdrop-blur-sm">
+          <i class="fab fa-discord text-white text-xl"></i>
+        </a>
+      </div>
+
+      <div class="flex items-center justify-center space-x-2 text-gray-300">
+        <i class="fas fa-eye"></i>
+        <span class="font-semibold" id="view-count">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Partículas -->
+  <div class="fixed top-4 right-4 z-20">
+    <div class="w-2 h-2 bg-white rounded-full opacity-60 animate-ping"></div>
+  </div>
+  <div class="fixed bottom-4 left-4 z-20">
+    <div class="w-1 h-1 bg-white rounded-full opacity-40 animate-ping" style="animation-delay: 1s;"></div>
+  </div>
+
+  <script>
+    const music = document.getElementById("bg-music");
+    const btn = document.querySelector(".volume-button");
+
+    function toggleMusic() {
+      if (music.muted || music.volume === 0) {
+        music.muted = false;
+        music.volume = 1;
+        music.play();
+        btn.textContent = "🔊";
+      } else {
+        music.muted = true;
+        btn.textContent = "🔇";
+      }
+    }
+
+    window.addEventListener("load", () => {
+      music.currentTime = 0.25;
+      music.volume = 1;
+      music.muted = false;
+
+      music.play().then(() => {
+        btn.textContent = "🔊";
+      }).catch(() => {
+        music.muted = true;
+        btn.textContent = "🔇";
+      });
+
+      document.body.addEventListener("click", () => {
+        if (music.paused) {
+          music.muted = false;
+          music.currentTime = 0.25;
+          music.play();
+          btn.textContent = "🔊";
+        }
+      }, { once: true });
+
+      const viewKey = "manuzinha-views";
+      let views = localStorage.getItem(viewKey);
+      if (!views) views = 0;
+      views = parseInt(views) + 1;
+      localStorage.setItem(viewKey, views);
+      document.getElementById("view-count").textContent = views;
+    });
+  </script>
+</body>
+</html>
